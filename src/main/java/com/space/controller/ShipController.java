@@ -97,9 +97,6 @@ public class ShipController {
         return shipService.createShip(ship);
     }
 
-
-
-
     @ResponseBody
     @RequestMapping(value = "/ships/{id}", method = RequestMethod.GET)
     public ResponseEntity getShip(@PathVariable String id) {

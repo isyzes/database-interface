@@ -10,18 +10,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.util.NestedServletException;
 
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 
 
 @Service
 public class ShipService {
-
-    private List<Ship> ships = new ArrayList<>();
-
+    private List<Ship> ships;
     private final ShipRepository shipRepository;
 
     @Autowired
@@ -32,6 +30,7 @@ public class ShipService {
     public List<Ship> getShipsList(String name, String planet, ShipType shipType, Long after, Long before, Boolean isUsed,
             Double minSpeed, Double maxSpeed, Integer minCrewSize, Integer maxCrewSize, Double minRating, Double maxRating) {
 
+
         if (name == null && planet == null && shipType == null && after == null && before == null
         && isUsed == null && minSpeed == null && maxSpeed == null && minCrewSize == null && maxCrewSize == null && minRating == null
         && maxRating == null) {
@@ -39,67 +38,128 @@ public class ShipService {
             return ships;
         }
 
-         this.ships = new ArrayList<>();
+        this.ships.clear();
 
         if (!StringUtils.isEmpty(name)) {
-            this.ships.addAll(shipRepository.findByNameContaining(name));
+            if (ships.isEmpty())
+                this.ships.addAll(shipRepository.findByNameContaining(name));
+            else
+                ships.removeIf(ship -> !ship.getName().contains(name));
         }
 
         if (!StringUtils.isEmpty(planet)) {
-            this.ships.addAll(shipRepository.findByPlanetContaining(planet));
+            if (ships.isEmpty())
+                this.ships.addAll(shipRepository.findByPlanetContaining(planet));
+            else ships.removeIf(ship -> !ship.getPlanet().contains(planet));
+
         }
 
         if (!StringUtils.isEmpty(shipType)) {
-            this.ships.addAll(shipRepository.findByShipType(shipType));
+            if (ships.isEmpty())
+                this.ships.addAll(shipRepository.findByShipType(shipType));
+            else ships.removeIf(ship -> ship.getShipType() != shipType);
         }
 
         // можно переписать
-        if (after != null && after > 0 && before == null) {
-            before = Utilities.MAX_PROD_DATE;
-
-            addListDate(after, before);
+        if (after != null && after > 0 &&  before == null) {
+            if (ships.isEmpty()) {
+                before = Utilities.MAX_PROD_DATE;
+                addListDate(after, before);
+            }
+            else {
+                Long finalAfter = after;
+                ships.removeIf(ship -> ship.getProdDate().getTime() < finalAfter);
+            }
         }
 
         if (before != null && before > 0 && after == null) {
-            after = Utilities.MIN_PROD_DATE;
-
-            addListDate(after, before);
+            if (ships.isEmpty()) {
+                after = Utilities.MIN_PROD_DATE;
+                addListDate(after, before);
+            } else {
+                Long finalBefore = before;
+                ships.removeIf(ship -> ship.getProdDate().getTime() > finalBefore);
+            }
         }
 
+
         if (before != null && before > 0 && after != null && after > 0) {
-            addListDate(after, before);
+            if (ships.isEmpty()) {
+                addListDate(after, before);
+            } else {
+                Long finalBefore = before;
+                Long finalAfter = after;
+                ships.removeIf(ship -> ship.getProdDate().getTime() > finalBefore || ship.getProdDate().getTime() < finalAfter);
+            }
         }
 
         if (isUsed != null) {
-            this.ships.addAll(shipRepository.findByIsUsed(isUsed));
+            if (ships.isEmpty()) {
+                this.ships.addAll(shipRepository.findByIsUsed(isUsed));
+            } else {
+                ships.removeIf(ship -> ship.getUsed() != isUsed);
+            }
         }
 
         if (maxSpeed != null && minSpeed != null && maxSpeed > 0 && minSpeed > 0) {
-            addListSpeed(minSpeed, maxSpeed);
+            if (ships.isEmpty()) {
+                addListSpeed(minSpeed, maxSpeed);
+            } else {
+                Double finalMaxSpeed = maxSpeed;
+                Double finalMinSpeed = minSpeed;
+                ships.removeIf(ship -> ship.getSpeed() > finalMaxSpeed || ship.getSpeed() < finalMinSpeed);
+            }
         }
 
         if (maxSpeed != null && minSpeed == null && maxSpeed > 0) {
-            minSpeed = Utilities.MIN_SPEED;
-            addListSpeed(minSpeed, maxSpeed);
+           if (ships.isEmpty()) {
+               minSpeed = Utilities.MIN_SPEED;
+               addListSpeed(minSpeed, maxSpeed);
+           } else {
+               Double finalMaxSpeed = maxSpeed;
+               ships.removeIf(ship -> ship.getSpeed() > finalMaxSpeed);
+           }
         }
 
         if (minSpeed != null && maxSpeed == null && minSpeed > 0) {
-            maxSpeed = Utilities.MAX_SPEED;
-            addListSpeed(minSpeed, maxSpeed);
+            if (ships.isEmpty()) {
+                maxSpeed = Utilities.MAX_SPEED;
+                addListSpeed(minSpeed, maxSpeed);
+            } else {
+
+                Double finalMinSpeed = minSpeed;
+                ships.removeIf(ship -> ship.getSpeed() < finalMinSpeed);
+            }
         }
 
         if (minCrewSize != null && maxCrewSize != null && minCrewSize > 0 && maxCrewSize > 0) {
-            addListCrewSize(minCrewSize, maxCrewSize);
+            if (ships.isEmpty()) {
+                addListCrewSize(minCrewSize, maxCrewSize);
+            } else {
+                Integer finalMinCrewSize = minCrewSize;
+                Integer finalMaxCrewSize = maxCrewSize;
+                ships.removeIf(ship -> ship.getCrewSize() > finalMaxCrewSize || ship.getCrewSize() < finalMinCrewSize);
+            }
         }
 
         if (minCrewSize != null && maxCrewSize == null && minCrewSize > 0) {
-            maxCrewSize = Utilities.MAX_CREW_SIZE;
-            addListCrewSize(minCrewSize, maxCrewSize);
+            if (ships.isEmpty()) {
+                maxCrewSize = Utilities.MAX_CREW_SIZE;
+                addListCrewSize(minCrewSize, maxCrewSize);
+            } else {
+                Integer finalMinCrewSize = minCrewSize;
+                ships.removeIf(ship -> ship.getCrewSize() < finalMinCrewSize);
+            }
         }
 
         if (maxCrewSize != null && minCrewSize == null && maxCrewSize > 0) {
-            minCrewSize = Utilities.MIN_CREW_SIZE;
-            addListCrewSize(minCrewSize, maxCrewSize);
+            if (ships.isEmpty()) {
+                minCrewSize = Utilities.MIN_CREW_SIZE;
+                addListCrewSize(minCrewSize, maxCrewSize);
+            } else {
+                Integer finalMaxCrewSize = maxCrewSize;
+                ships.removeIf(ship -> ship.getCrewSize() > finalMaxCrewSize);
+            }
         }
 
         if (minRating != null && maxRating != null && minRating > 0 && maxRating > 0) {

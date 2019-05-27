@@ -56,8 +56,6 @@ public class Utilities {
             result = (80 * speed * 1) / (maxDate.get(Calendar.YEAR) - prodDat.get(Calendar.YEAR) + 1);
         }
 
-
-        System.out.println(result);
         return (double)Math.round(result * 100d) / 100d;
     }
 
