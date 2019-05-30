@@ -1,17 +1,14 @@
 package com.space.controller;
 
 import com.space.model.Ship;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class Utilities {
     public final static long MIN_PROD_DATE = 26192239200000L;
-    public final static long MAX_PROD_DATE = 33134738400000L;
+    public final static long MAX_PROD_DATE = 33134738399999L;
 
     public final static double MAX_SPEED = 0.99;
     public final static double MIN_SPEED = 0.01;
@@ -47,16 +44,18 @@ public class Utilities {
         maxDate.setTime(new Date(MAX_PROD_DATE));
 
         Calendar prodDat = Calendar.getInstance();
-        maxDate.setTime(prodDate);
+        prodDat.setTime(prodDate);
+
+        int d1 = maxDate.get(Calendar.YEAR);
+        int d2 = prodDat.get(Calendar.YEAR);
 
         if (isUsed) {
-            result = (80 * speed * 0.5) / (maxDate.get(Calendar.YEAR) - prodDat.get(Calendar.YEAR) + 1);
-        }
-        else {
-            result = (80 * speed * 1) / (maxDate.get(Calendar.YEAR) - prodDat.get(Calendar.YEAR) + 1);
+            result = (80 * speed * 0.2) / (d1 - d2 + 1);
+        } else {
+            result = (80 * speed * 1) / (d1 - d2 + 1);
         }
 
-        return (double)Math.round(result * 100d) / 100d;
+        return  Math.round(result * 100d) / 100d;
     }
 
     public static boolean isValidShip(Ship ship) {
@@ -73,9 +72,10 @@ public class Utilities {
     }
 
     public static boolean isValidString(final String str) {
+//        if (str == null) return false;
         if (str.length() > 50) return false;
 
-        return !StringUtils.isEmpty(str);
+        return !str.equals("");
     }
 
     public static boolean isValidSpeed(Double speed) {
@@ -84,7 +84,7 @@ public class Utilities {
     }
 
     public static boolean isValidCrewSize(Integer crewSize) {
-        if (crewSize == null) return false;
+//        if (crewSize == null) return false;
         return crewSize <= Utilities.MAX_CREW_SIZE && crewSize >= Utilities.MIN_CREW_SIZE;
     }
 

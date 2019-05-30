@@ -22,6 +22,10 @@ public interface ShipRepository extends JpaRepository<Ship, Long> {
     List<Ship> findByCrewSize(Integer crewSize);
 
     List<Ship> findByRatingBetween(Double minRating, Double maxRating);
+    List<Ship> findByRating(Double rating);
+
+    List<Ship> findByRatingGreaterThanEqual(Double rating); //>=
+    List<Ship> findByRatingLessThanEqual(Double rating); // <=
 
     Ship findById(long id);
 }

@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/rest")
 public class ShipController {
     @Autowired
     private ShipService shipService;
-    private Integer pageNumber = 0;
-    private Integer pageSize = 3;
+//    private Integer pageNumber = 0;
+//    private Integer pageSize = 3;
 
     @RequestMapping(value = "/ships", method = RequestMethod.GET)
     public ResponseEntity<Ship> getShipsList(
@@ -37,22 +38,22 @@ public class ShipController {
             @RequestParam(value = "minRating", required = false) Double minRating,
             @RequestParam(value = "maxRating", required = false) Double maxRating,
 
-            @RequestParam(value = "order", required = false) ShipOrder order,
-            @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize
+            @RequestParam(value = "order", required = false, defaultValue = "ID") ShipOrder order,
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "3") Integer pageSize
     ) {
-
         List<Ship> ships = shipService.getShipsList(name, planet, shipType, after, before, isUsed, minSpeed, maxSpeed, minCrewSize, maxCrewSize, minRating,maxRating);
 
 
-        if (pageNumber != null)
-            this.pageNumber = pageNumber;
 
-        if (pageSize != null)
-           this.pageSize = pageSize;
+//        if (pageNumber != null)
+//            this.pageNumber = pageNumber;
+//
+//        if (pageSize != null)
+//           this.pageSize = pageSize;
 
-        if (order == null)
-            order = ShipOrder.ID;
+//        if (order == null)
+//            order = ShipOrder.ID;
 
         ShipOrder finalOrder = order;
         Comparator<Ship> comparator = new Comparator<Ship>() {
@@ -80,16 +81,31 @@ public class ShipController {
         ships.sort(comparator);
 
         PagedListHolder<Ship> paged = new PagedListHolder(ships);
-        paged.setPage(this.pageNumber);
-        paged.setPageSize(this.pageSize);
+        paged.setPage(pageNumber);
+        paged.setPageSize(pageSize);
 
         return new ResponseEntity(paged.getPageList(), HttpStatus.OK);
     }
 
     //вроде правильно
-    @RequestMapping(value = "ships/count", method = RequestMethod.GET)
-    public ResponseEntity getShipsCount() {
-        return new ResponseEntity(shipService.getCount(), HttpStatus.OK);
+    @RequestMapping(value = "/ships/count", method = RequestMethod.GET)
+    public ResponseEntity getShipsCount(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "planet", required = false) String planet,
+            @RequestParam(value = "shipType", required = false) ShipType shipType,
+            @RequestParam(value = "after", required = false) Long after,
+            @RequestParam(value = "before", required = false) Long before,
+            @RequestParam(value = "isUsed", required = false) Boolean isUsed,
+            @RequestParam(value = "minSpeed", required = false) Double minSpeed,
+            @RequestParam(value = "maxSpeed", required = false) Double maxSpeed,
+            @RequestParam(value = "minCrewSize", required = false) Integer minCrewSize,
+            @RequestParam(value = "maxCrewSize", required = false) Integer maxCrewSize,
+            @RequestParam(value = "minRating", required = false) Double minRating,
+            @RequestParam(value = "maxRating", required = false) Double maxRating
+    ) {
+        Integer count = shipService.getShipsList(name, planet, shipType, after, before, isUsed, minSpeed, maxSpeed, minCrewSize, maxCrewSize, minRating, maxRating).size();
+
+        return new ResponseEntity(count, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/ships", method = RequestMethod.POST)

@@ -119,14 +119,6 @@ public class Ship {
     }
 
     public boolean isEmptyShip() {
-//        if (!StringUtils.isEmpty(this.name) && this.name != null) return false;
-//        if (!StringUtils.isEmpty(this.planet) && this.planet != null) return false;
-//        if (!StringUtils.isEmpty(this.shipType) && this.shipType != null) return false;
-//        if (!StringUtils.isEmpty(this.prodDate) && this.prodDate != null) return false;
-//        if (!StringUtils.isEmpty(this.isUsed) && this.isUsed != null)  return false;
-//        if (!StringUtils.isEmpty(this.speed) && this.speed != null) return false;
-//        if (!StringUtils.isEmpty(this.crewSize) && this.crewSize != null) return false;
-
         if (this.name != null) return false;
         if (this.planet != null) return false;
         if (this.shipType != null) return false;
@@ -134,8 +126,6 @@ public class Ship {
         if (this.isUsed != null)  return false;
         if (this.speed != null) return false;
         if (this.crewSize != null) return false;
-
-
 
         return true;
     }
@@ -149,7 +139,7 @@ public class Ship {
                 Objects.equals(name, ship.name) &&
                 Objects.equals(planet, ship.planet) &&
                 shipType == ship.shipType &&
-                Objects.equals(prodDate, ship.prodDate) &&
+                Objects.equals(prodDate.getYear(), ship.prodDate.getYear()) &&
                 Objects.equals(isUsed, ship.isUsed) &&
                 Objects.equals(speed, ship.speed) &&
                 Objects.equals(crewSize, ship.crewSize) &&
