@@ -87,7 +87,7 @@ public class ShipController {
         return new ResponseEntity(paged.getPageList(), HttpStatus.OK);
     }
 
-    //вроде правильно
+
     @RequestMapping(value = "/ships/count", method = RequestMethod.GET)
     public ResponseEntity getShipsCount(
             @RequestParam(value = "name", required = false) String name,

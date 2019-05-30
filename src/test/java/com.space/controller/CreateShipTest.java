@@ -128,9 +128,6 @@ public class CreateShipTest {
     //test8
     @Test
     public void createShipIsUsedTrueTest() throws Exception {
-        System.out.println(Utilities.getShipRating(expected.speed, expected.isUsed, new Date(expected.prodDate)));
-        System.out.println(expected.rating);
-
         ResultActions resultActions = mockMvc.perform(post("/rest/ships/")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -138,14 +135,7 @@ public class CreateShipTest {
                 .andExpect(status().isOk());
 
         String contentAsString = resultActions.andReturn().getResponse().getContentAsString();
-
-
         ShipInfoTest actual = mapper.readValue(contentAsString, ShipInfoTest.class);
-        System.out.println(Utilities.getShipRating(actual.speed, actual.isUsed, new Date(actual.prodDate)));
-        System.out.println(actual.rating);
-
-        System.out.println(Utilities.getShipRating(expected.speed, expected.isUsed, new Date(expected.prodDate)));
-        System.out.println(expected.rating);
 
         assertTrue("Возвращается не правильный результат при запросе создания корабля с параметром isUsed.", actual.equals(expected));
     }

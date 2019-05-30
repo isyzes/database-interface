@@ -212,14 +212,6 @@ public class ShipService {
     }
 
     public ResponseEntity createShip(Ship ship) {
-//        System.out.println(ship.getName());
-//        System.out.println(ship.getPlanet());
-//        System.out.println(ship.getShipType());
-//        System.out.println(ship.getProdDate());
-//        System.out.println(ship.getUsed());
-//        System.out.println(ship.getSpeed());
-//        System.out.println(ship.getCrewSize());
-
         if (!Utilities.isValidShip(ship)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
