@@ -160,7 +160,6 @@ public class ShipService {
         }
 
         if (minRating != null && maxRating != null && minRating > 0 && maxRating > 0) {
-            System.out.println(1);
 
             if (this.ships.isEmpty())
                 addListRating(minRating, maxRating);

@@ -13,15 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/rest")
 public class ShipController {
     @Autowired
     private ShipService shipService;
-//    private Integer pageNumber = 0;
-//    private Integer pageSize = 3;
 
     @RequestMapping(value = "/ships", method = RequestMethod.GET)
     public ResponseEntity<Ship> getShipsList(
@@ -44,34 +41,22 @@ public class ShipController {
     ) {
         List<Ship> ships = shipService.getShipsList(name, planet, shipType, after, before, isUsed, minSpeed, maxSpeed, minCrewSize, maxCrewSize, minRating,maxRating);
 
-
-
-//        if (pageNumber != null)
-//            this.pageNumber = pageNumber;
-//
-//        if (pageSize != null)
-//           this.pageSize = pageSize;
-
-//        if (order == null)
-//            order = ShipOrder.ID;
-
-        ShipOrder finalOrder = order;
         Comparator<Ship> comparator = new Comparator<Ship>() {
             @Override
             public int compare(Ship o1, Ship o2) {
-                if (finalOrder.equals(ShipOrder.ID)) {
+                if (order.equals(ShipOrder.ID)) {
                     return o1.getId().compareTo(o2.getId());
                 }
 
-                if (finalOrder.equals(ShipOrder.SPEED)) {
+                if (order.equals(ShipOrder.SPEED)) {
                     return o1.getSpeed().compareTo(o2.getSpeed());
                 }
 
-                if (finalOrder.equals(ShipOrder.DATE)) {
+                if (order.equals(ShipOrder.DATE)) {
                     return o1.getProdDate().compareTo(o2.getProdDate());
                 }
 
-                if (finalOrder.equals(ShipOrder.RATING)) {
+                if (order.equals(ShipOrder.RATING)) {
                     return o1.getRating().compareTo(o2.getRating());
                 }
 
@@ -86,7 +71,6 @@ public class ShipController {
 
         return new ResponseEntity(paged.getPageList(), HttpStatus.OK);
     }
-
 
     @RequestMapping(value = "/ships/count", method = RequestMethod.GET)
     public ResponseEntity getShipsCount(
