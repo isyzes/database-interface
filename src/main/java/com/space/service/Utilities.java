@@ -15,23 +15,19 @@ public class Utilities {
     private final static int MAX_CREW_SIZE = 9999;
     private final static int MIN_CREW_SIZE = 1;
 
-    private static boolean isNumeric(final String str) {
-        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
-    }
-
-    private static boolean isPrime(final String str) {
-        double num = Double.parseDouble(str);
-        return (num % 1) == 0;
-    }
-
     public static boolean isValidId(final String str) {
-        if (!isNumeric(str)) {
+        boolean isNumeric = str.matches("-?\\d+(\\.\\d+)?");
+
+        if (!isNumeric) {
             return false;
         }
 
-        if (!isPrime(str)) {
+        double num = Double.parseDouble(str);
+
+        if ((num % 1) != 0) {
             return false;
         }
+
         long id = Long.parseLong(str);
 
         return id > 0;
@@ -58,11 +54,13 @@ public class Utilities {
     }
 
     public static boolean isValidShip(Ship ship) {
-        if (ship.getShipType() == null || ship.getProdDate() == null || ship.getSpeed() == null || ship.getCrewSize() == null)
+        if (ship.getShipType() == null || ship.getProdDate() == null || ship.getSpeed() == null || ship.getCrewSize() == null
+                || ship.getName() == null || ship.getPlanet() == null)
             return false;
 
         if (!isValidString(ship.getName())) return false;
         if (!isValidString(ship.getPlanet())) return false;
+
         if (!isValidSpeed(ship.getSpeed())) return false;
         if (!isValidCrewSize(ship.getCrewSize())) return false;
         if (!isValidProdDate(ship.getProdDate())) return false;

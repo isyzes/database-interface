@@ -1,10 +1,7 @@
 package com.space.model;
 
-import org.springframework.util.StringUtils;
-
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "ship")
@@ -32,9 +29,6 @@ public class Ship {
     private Integer crewSize;
     @Column(name = "rating")
     private Double rating;
-
-    public Ship() {
-    }
 
     public Long getId() {
         return id;
@@ -113,7 +107,7 @@ public class Ship {
         if (this.planet != null) return false;
         if (this.shipType != null) return false;
         if (this.prodDate != null) return false;
-        if (this.isUsed != null)  return false;
+        if (this.isUsed != null) return false;
         if (this.speed != null) return false;
         if (this.crewSize != null) return false;
 
