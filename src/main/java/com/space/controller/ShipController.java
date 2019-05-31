@@ -97,19 +97,15 @@ public class ShipController {
         return shipService.createShip(ship);
     }
 
-    @ResponseBody
     @RequestMapping(value = "/ships/{id}", method = RequestMethod.GET)
     public ResponseEntity getShip(@PathVariable String id) {
         return shipService.getShip(id);
     }
 
-
-    @ResponseBody
     @RequestMapping(value = "/ships/{id}", method = RequestMethod.POST)
     public ResponseEntity updateShip(@PathVariable String id, @RequestBody Ship ship) {
         return shipService.updateShip(id, ship);
     }
-
 
     @RequestMapping(value = "/ships/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteShip(@PathVariable String id) {

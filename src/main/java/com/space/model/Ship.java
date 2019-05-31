@@ -36,16 +36,6 @@ public class Ship {
     public Ship() {
     }
 
-    public Ship(String name, String planet, ShipType shipType, Date prodDate, Boolean isUsed, Double speed, Integer crewSize) {
-        this.name = name;
-        this.planet = planet;
-        this.shipType = shipType;
-        this.prodDate = prodDate;
-        this.isUsed = isUsed;
-        this.speed = speed;
-        this.crewSize = crewSize;
-    }
-
     public Long getId() {
         return id;
     }
@@ -128,26 +118,5 @@ public class Ship {
         if (this.crewSize != null) return false;
 
         return true;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ship ship = (Ship) o;
-        return Objects.equals(id, ship.id) &&
-                Objects.equals(name, ship.name) &&
-                Objects.equals(planet, ship.planet) &&
-                shipType == ship.shipType &&
-                Objects.equals(prodDate.getYear(), ship.prodDate.getYear()) &&
-                Objects.equals(isUsed, ship.isUsed) &&
-                Objects.equals(speed, ship.speed) &&
-                Objects.equals(crewSize, ship.crewSize) &&
-                Objects.equals(rating, ship.rating);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, planet, shipType, prodDate, isUsed, speed, crewSize, rating);
     }
 }

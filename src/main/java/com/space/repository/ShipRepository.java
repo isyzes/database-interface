@@ -13,17 +13,25 @@ public interface ShipRepository extends JpaRepository<Ship, Long> {
     List<Ship> findByNameContaining(String name);
     List<Ship> findByPlanetContaining(String planet);
     List<Ship> findByShipType(ShipType shipType);
+    List<Ship> findByIsUsed(Boolean isUsed);
+
     List<Ship> findByProdDateBetween(Date prodDate, Date prodDate2);
     List<Ship> findByProdDate(Date prodDate);
-    List<Ship> findByIsUsed(Boolean isUsed);
+    List<Ship> findByProdDateGreaterThanEqual(Date prodDate); //>=
+    List<Ship> findByProdDateLessThanEqual(Date prodDate); // <=
+
     List<Ship> findBySpeedBetween(Double minSpeed, Double maxSpeed);
     List<Ship> findBySpeed(Double speed);
+    List<Ship> findBySpeedGreaterThanEqual(Double speed); //>=
+    List<Ship> findBySpeedLessThanEqual(Double speed); // <=
+
     List<Ship> findByCrewSizeBetween(Integer minCrewSize, Integer maxCrewSize);
     List<Ship> findByCrewSize(Integer crewSize);
+    List<Ship> findByCrewSizeGreaterThanEqual(Integer crewSize); //>=
+    List<Ship> findByCrewSizeLessThanEqual(Integer crewSize); // <=
 
     List<Ship> findByRatingBetween(Double minRating, Double maxRating);
     List<Ship> findByRating(Double rating);
-
     List<Ship> findByRatingGreaterThanEqual(Double rating); //>=
     List<Ship> findByRatingLessThanEqual(Double rating); // <=
 
