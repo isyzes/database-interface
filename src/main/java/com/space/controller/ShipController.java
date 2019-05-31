@@ -2,7 +2,6 @@ package com.space.controller;
 
 import com.space.model.Ship;
 import com.space.model.ShipType;
-import com.space.repository.ShipRepository;
 import com.space.service.ShipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
@@ -85,8 +84,7 @@ public class ShipController {
             @RequestParam(value = "minCrewSize", required = false) Integer minCrewSize,
             @RequestParam(value = "maxCrewSize", required = false) Integer maxCrewSize,
             @RequestParam(value = "minRating", required = false) Double minRating,
-            @RequestParam(value = "maxRating", required = false) Double maxRating
-    ) {
+            @RequestParam(value = "maxRating", required = false) Double maxRating) {
         Integer count = shipService.getShipsList(name, planet, shipType, after, before, isUsed, minSpeed, maxSpeed, minCrewSize, maxCrewSize, minRating, maxRating).size();
 
         return new ResponseEntity(count, HttpStatus.OK);
@@ -112,5 +110,3 @@ public class ShipController {
         return shipService.deleteShip(id);
     }
 }
-
-
