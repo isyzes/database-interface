@@ -42,7 +42,7 @@ public class TestDataSourceConfig {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/test?serverTimezone=UTC");
         dataSource.setUsername("root");
-        dataSource.setPassword("1111");
+        dataSource.setPassword("root");
         return dataSource;
     }
 
